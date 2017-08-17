@@ -13,8 +13,8 @@ class Neuron:
         self.bias = 1
         self.input_weight = 0.0  # weight for every input neuron (only 1st layer)
         # self.input_weights = []  # weights which go out the neuron from previous layer
-        self.expected_value = 0.1
-        self.learning_rate = 0.2
+        self.expected_value = 0
+        self.learning_rate = 0.1
         self.matched = 0
 
     # do zmiany, nie moze tak byc, bo sie w zyciu nie nauczy!
