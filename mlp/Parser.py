@@ -75,67 +75,66 @@ for i in range(len(layer2.neurons)):
 
 
 def back_propagation():
-    for i in range(100):
-        for d in iris[0:85]:
-            input_values = d[0:4]
-            output_values = d[4:7]
-            for i in range(len(layer0.neurons)):
-                layer0.neurons[i].output_value = input_values[i]
+    for d in iris[0:98]:
+        input_values = d[0:4]
+        output_values = d[4:7]
+        for i in range(len(layer0.neurons)):
+            layer0.neurons[i].output_value = input_values[i]
 
-            # for i in range(len(layer0.neurons)):
-            #    print("Layer0 neurons output values " + str(layer0.neurons[i].output_value))
+        # for i in range(len(layer0.neurons)):
+        #    print("Layer0 neurons output values " + str(layer0.neurons[i].output_value))
 
-            for i in range(len(layer3.neurons)):
-                layer3.neurons[i].expected_value = output_values[i]
+        for i in range(len(layer3.neurons)):
+            layer3.neurons[i].expected_value = output_values[i]
 
-            # for i in range(len(layer3.neurons)):
-            #    print("Layer3 neurons expected values " + str(layer3.neurons[i].expected_value))
+        # for i in range(len(layer3.neurons)):
+        #    print("Layer3 neurons expected values " + str(layer3.neurons[i].expected_value))
 
-            for i in range(len(layer1.neurons)):
-                layer1.neurons[i].calculate_weighted_sum()
-                layer1.neurons[i].calculate_output_value()
-                layer1.neurons[i].transfer_derivative()
+        for i in range(len(layer1.neurons)):
+            layer1.neurons[i].calculate_weighted_sum()
+            layer1.neurons[i].calculate_output_value()
+            layer1.neurons[i].transfer_derivative()
 
-            # print("Layer 1: ")
-            # for i in range(len(layer1.neurons)):
-            #    print("Output value " + str(layer1.neurons[i].output_value) + " weighted sum " + str(layer1.neurons[i].weighted_sum))
+        # print("Layer 1: ")
+        # for i in range(len(layer1.neurons)):
+        #    print("Output value " + str(layer1.neurons[i].output_value) + " weighted sum " + str(layer1.neurons[i].weighted_sum))
 
-            for i in range(len(layer2.neurons)):
-                layer2.neurons[i].calculate_weighted_sum()
-                layer2.neurons[i].calculate_output_value()
-                layer2.neurons[i].transfer_derivative()
+        for i in range(len(layer2.neurons)):
+            layer2.neurons[i].calculate_weighted_sum()
+            layer2.neurons[i].calculate_output_value()
+            layer2.neurons[i].transfer_derivative()
 
-            # print("Layer 2: ")
-            # for i in range(len(layer2.neurons)):
-            #    print("Output value " + str(layer2.neurons[i].output_value) + " weighted sum " + str(layer2.neurons[i].weighted_sum))
+        # print("Layer 2: ")
+        # for i in range(len(layer2.neurons)):
+        #    print("Output value " + str(layer2.neurons[i].output_value) + " weighted sum " + str(layer2.neurons[i].weighted_sum))
 
-            for i in range(len(layer3.neurons)):
-                layer3.neurons[i].calculate_weighted_sum()
-                layer3.neurons[i].calculate_output_value()
-                layer3.neurons[i].transfer_derivative()
+        for i in range(len(layer3.neurons)):
+            layer3.neurons[i].calculate_weighted_sum()
+            layer3.neurons[i].calculate_output_value()
+            layer3.neurons[i].transfer_derivative()
 
-            # print("Layer 3: ")
-            # for i in range(len(layer3.neurons)):
-            #    print("Output value " + str(
-            #        layer3.neurons[i].output_value) + " weighted sum " + str(layer3.neurons[i].weighted_sum))
+        # print("Layer 3: ")
+        # for i in range(len(layer3.neurons)):
+        #    print("Output value " + str(
+        #        layer3.neurons[i].output_value) + " weighted sum " + str(layer3.neurons[i].weighted_sum))
 
-            # calculating delta_param and updating weights
-            # for l in reversed(range(len(network.layers))):
-            #    for n in range(len(network.layers[l].neurons)):
-            #        print("delta param " + str(network.layers[l].neurons[n].calculate_delta_param()))
-            for l in reversed(range(len(network.layers))):
-                for n in range(len(network.layers[l].neurons)):
-                    network.layers[l].neurons[n].calculate_delta_param()
+        # calculating delta_param and updating weights
+        # for l in reversed(range(len(network.layers))):
+        #    for n in range(len(network.layers[l].neurons)):
+        #        print("delta param " + str(network.layers[l].neurons[n].calculate_delta_param()))
+        for l in reversed(range(len(network.layers))):
+            for n in range(len(network.layers[l].neurons)):
+                network.layers[l].neurons[n].calculate_delta_param()
 
-            for l in reversed(range(len(network.layers))):
-                # print("Layer " + str(l))
-                for n in range(len(network.layers[l].neurons)):
-                    network.layers[l].neurons[n].update_weight()
+        for l in reversed(range(len(network.layers))):
+            # print("Layer " + str(l))
+            for n in range(len(network.layers[l].neurons)):
+                network.layers[l].neurons[n].update_weight()
 
 
 def test_network():
     counter = 0
-    for d in iris[85:len(iris)-1]:
+    for d in iris[98:len(iris)-1]:
         input_data = d[0:4]
         print("Input data " + str(input_data))
         exp_output_data = d[4:7]
@@ -175,9 +174,10 @@ def test_network():
             print("Indices are the same")
             counter += 1
 
-    result = counter / len(iris[85:len(iris) - 1]) * 100
+    result = counter / len(iris[98:len(iris) - 1]) * 100
     print("Result " + str(result))
 
 if __name__ == "__main__":
-    back_propagation()
+    for i in range(100):
+        back_propagation()
     test_network()
