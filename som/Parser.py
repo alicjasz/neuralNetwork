@@ -4,6 +4,7 @@ import random
 from Layer import Layer
 from Neuron import Neuron
 from Network import Network
+from Grid import Grid
 
 
 def read_file():
@@ -20,20 +21,20 @@ def read_file():
             elif row[4] == "Iris-virginica":
                 expected_values = [0.0, 0.0, 1.0]
             iris.append([float(x.replace(",", ".")) for x in row[0:4]] + expected_values)
-    # random.shuffle(iris)
+
     return iris
 
 
 iris = read_file()
 network = Network()
 # layer with imputs
-layer0 = Layer()
+input_vector = Layer()
 layer1 = Layer()
 layer2 = Layer()
 layer3 = Layer()
 
 for i in range(4):
-    layer0.add_neuron(Neuron())
+    input_vector.add_neuron(Neuron())
 
 for i in range(5):
     layer1.add_neuron(Neuron())
@@ -44,21 +45,13 @@ for i in range(4):
 for i in range(3):
     layer3.add_neuron(Neuron())
 
-network.add_layer(layer0)
+network.add_layer(input_vector)
+
 network.add_layer(layer1)
 network.add_layer(layer2)
 network.add_layer(layer3)
 
-# creating connections
-# for i in range(4):
-#    layer0.get_all_neurons()[i].output_value = iris[i]
-#    print(str(layer0.get_neuron(i).output_value))
-
-for i in range(len(layer0.neurons)):
-    for j in range(len(layer1.neurons)):
-        layer0.neurons[i].add_output(layer1.neurons[j])
-        layer1.neurons[j].add_input(layer0.neurons[i])
-
+# creating connections for MLP layers
 for i in range(len(layer1.neurons)):
     for j in range(len(layer2.neurons)):
         layer1.neurons[i].add_output(layer2.neurons[j])
@@ -69,44 +62,44 @@ for i in range(len(layer2.neurons)):
         layer2.neurons[i].add_output(layer3.neurons[j])
         layer3.neurons[j].add_input(layer2.neurons[i])
 
+
 # setting weights for the rest of layers, only for testing
 # for key, value in layer3.neurons[2].input_synapses.items():
 #        print("Key " + str(key) + "value " + str(value))
 
 
-def back_propagation():
+def som():
+    grid = Grid()
+    grid.create_grid()
     for d in iris[0:98]:
         input_values = d[0:4]
         output_values = d[4:7]
-        for i in range(len(layer0.neurons)):
-            layer0.neurons[i].output_value = input_values[i]
+        # initializing neurons in input vector
+        for i in range(len(input_vector.neurons)):
+            input_vector.neurons[i].output_value = input_values[i]
 
-        # for i in range(len(layer0.neurons)):
-        #    print("Layer0 neurons output values " + str(layer0.neurons[i].output_value))
+        # creating connections between input vector and grid nodes
+        for i in range(len(input_vector.neurons)):
+            for j in range(len(grid.nodes)):
+                grid.nodes[j].add_input(input_vector.neurons[i].output_value)
 
-        for i in range(len(layer3.neurons)):
-            layer3.neurons[i].expected_value = output_values[i]
+        # creating connections between grid nodes and layer1
+        for i in range(len(grid.nodes)):
+            for j in range(len(layer1.neurons)):
+                layer1.neurons[j].add_input(grid.nodes[i])  # to change!
 
-        # for i in range(len(layer3.neurons)):
-        #    print("Layer3 neurons expected values " + str(layer3.neurons[i].expected_value))
+        # traing som
+        grid.learn_algorithm()
 
         for i in range(len(layer1.neurons)):
             layer1.neurons[i].calculate_weighted_sum()
             layer1.neurons[i].calculate_output_value()
             layer1.neurons[i].transfer_derivative()
 
-        # print("Layer 1: ")
-        # for i in range(len(layer1.neurons)):
-        #    print("Output value " + str(layer1.neurons[i].output_value) + " weighted sum " + str(layer1.neurons[i].weighted_sum))
-
         for i in range(len(layer2.neurons)):
             layer2.neurons[i].calculate_weighted_sum()
             layer2.neurons[i].calculate_output_value()
             layer2.neurons[i].transfer_derivative()
-
-        # print("Layer 2: ")
-        # for i in range(len(layer2.neurons)):
-        #    print("Output value " + str(layer2.neurons[i].output_value) + " weighted sum " + str(layer2.neurons[i].weighted_sum))
 
         for i in range(len(layer3.neurons)):
             layer3.neurons[i].calculate_weighted_sum()
@@ -134,14 +127,29 @@ def back_propagation():
 
 def test_network():
     counter = 0
-    for d in iris[98:len(iris)-1]:
-        input_data = d[0:4]
-        print("Input data " + str(input_data))
+    grid = Grid()
+    grid.create_grid()
+    for d in iris[0:98]:
+        input_values = d[0:4]
         exp_output_data = d[4:7]
         output_table = []
 
-        for i in range(len(layer0.neurons)):
-            layer0.neurons[i].output_value = input_data[i]
+        # initializing neurons in input vector
+        for i in range(len(input_vector.neurons)):
+            input_vector.neurons[i].output_value = input_values[i]
+
+        # creating connections between input vector and grid nodes
+        for i in range(len(input_vector.neurons)):
+            for j in range(len(grid.nodes)):
+                grid.nodes[j].add_input(input_vector.neurons[i].output_value)
+
+        # creating connections between grid nodes and layer1
+        for i in range(len(grid.nodes)):
+            for j in range(len(layer1.neurons)):
+                layer1.neurons[j].add_input(grid.nodes[i])  # to change!
+
+        # traing som
+        grid.learn_algorithm()
 
         for i in range(len(layer1.neurons)):
             layer1.neurons[i].calculate_weighted_sum()
@@ -177,7 +185,8 @@ def test_network():
     result = counter / len(iris[98:len(iris) - 1]) * 100
     print("Result " + str(result))
 
+
 if __name__ == "__main__":
     for i in range(100):
-        back_propagation()
+        som()
     test_network()

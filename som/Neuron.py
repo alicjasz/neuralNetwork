@@ -15,9 +15,23 @@ class Neuron:
         self.expected_value = 0
         self.learning_rate = 0.5
 
-    # do zmiany, nie moze tak byc, bo sie w zyciu nie nauczy!
+    def find_max_value(self):
+        max_val = list()
+        for k in self.input_synapses.keys():
+            max_val.append(k.output_value)
+        return max(max_val)
+
+    def find_min_value(self):
+        min_val = list()
+        for k in self.input_synapses.keys():
+            min_val.append(k.output_value)
+        return min(min_val)
+
+    # SOM
     def add_input(self, neuron):
-        self.input_synapses[neuron] = random.uniform(-0.1, 0.1)
+        min_value = (self.find_max_value() - self.find_min_value()) / 100
+        max_value = (self.find_max_value() - self.find_min_value()) / 10
+        self.input_synapses[neuron] = random.uniform(min_value, max_value)
 
     def add_output(self, neuron):
         self.output_synapses[neuron] = random.uniform(-0.1, 0.1)
