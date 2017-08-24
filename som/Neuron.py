@@ -28,10 +28,13 @@ class Neuron:
         return min(min_val)
 
     # SOM
-    def add_input(self, neuron):
-        min_value = (self.find_max_value() - self.find_min_value()) / 100
-        max_value = (self.find_max_value() - self.find_min_value()) / 10
+    def add_input_neuron(self, neuron, min_value, max_value):
+        min_value = (max_value - min_value) / 100
+        max_value = (max_value - min_value) / 10
         self.input_synapses[neuron] = random.uniform(min_value, max_value)
+
+    def add_input(self, neuron):
+        self.input_synapses[neuron] = random.uniform(-0.1, 0.1)
 
     def add_output(self, neuron):
         self.output_synapses[neuron] = random.uniform(-0.1, 0.1)
