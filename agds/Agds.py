@@ -64,27 +64,9 @@ if __name__ == "__main__":
     for i in class_value:
         class_value_attr.add_x_value(i)
 
-    ''''
-    sle_keys = list(sle_attr.nodes.keys())
-    sle_attr.calculate_weight(sle_keys)
-
-    swi_keys = list(swi_attr.nodes.keys())
-    swi_attr.calculate_weight(swi_keys)
-
-    ple_keys = list(ple_attr.nodes.keys())
-    ple_attr.calculate_weight(ple_keys)
-
-    pwi_keys = list(pwi_attr.nodes.keys())
-    pwi_attr.calculate_weight(pwi_keys)
-
-    class_value_keys = list(class_value_attr.nodes.keys())
-    class_value_attr.calculate_weight(class_value_keys)
-    '''
-    print(len(sle_attr.nodes))
-    dupa = list(sle_attr.nodes.keys())
-    sle_attr.calculate_weight()
     object_model = Object()
-    object_model.add_attributes(float(iris[0][0]), float(iris[0][1]), float(iris[0][2]), float(iris[0][3]), float(iris[0][4]))
+    object_model.add_attributes(float(iris[2][0]), float(iris[2][1]), float(iris[2][2]), float(iris[2][3]),
+                                float(iris[2][4]))
 
     list_of_objects = []
 
@@ -98,26 +80,25 @@ if __name__ == "__main__":
     param = [sle_attr, swi_attr, ple_attr, pwi_attr, class_value_attr]
 
     for i in list_of_objects:
-        x = param[0].nodes[i.attributes[0]]
-        # print("sle " + str(i.attributes[0]))
-        tab.append(x)
+        a1 = i.attributes[0]
+        tab1 = param[0].calculate_weight(object_model.attributes[0], a1)
 
-        x = i.attributes[1]
-        # print("swi " + str(x))
-        tab.append(x)
+        a2 = i.attributes[1]
+        tab2 = param[1].calculate_weight(object_model.attributes[1], a2)
 
-        x = i.attributes[2]
-        # print("ple " + str(x))
-        tab.append(x)
+        a3 = i.attributes[2]
+        tab3 = param[2].calculate_weight(object_model.attributes[2], a3)
 
-        x = i.attributes[3]
-        # print("pwi " + str(x))
-        tab.append(x)
+        a4 = i.attributes[3]
+        tab4 = param[3].calculate_weight(object_model.attributes[3], a4)
 
-        x = i.attributes[4]
-        # print("class " + str(x))
-        tab.append(x)
+        a5 = i.attributes[4]
+        tab5 = param[4].calculate_weight(object_model.attributes[4], a5)
 
+        y = tab1 * 0.2 + tab2 * 0.2 + tab3 * 0.2 + tab4 * 0.2 + tab5 * 0.2
+        tab.append(y)
+
+    print(str(tab))
 
 
 

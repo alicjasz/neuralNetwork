@@ -1,5 +1,4 @@
 class Attribute:
-
     def __init__(self, name):
         self.name = name
         self.nodes = dict()  # keys -> params form file, # values -> weights
@@ -22,15 +21,13 @@ class Attribute:
             max_value.append(i)
         return max(max_value)
 
-    def calculate_weight(self):
-        temp = self.nodes_keys[0]
+    def calculate_weight(self, obj, temp):
         min_val = self.calculate_min_value()
         max_val = self.calculate_max_value()
-        for k in self.nodes_keys[1:]:
-            self.nodes[k] = 1 - abs(temp - k) / (max_val - min_val)
-            # print("nodes[k] " + str(self.nodes[k]))
-            temp = k
-        # print(str(self.nodes))
+        self.nodes[obj] = 1 - abs(obj - temp) / (max_val - min_val)
+        value = self.nodes[obj]
+        return value
+
 
 
 
